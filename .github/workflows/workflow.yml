@@ -10,8 +10,8 @@ on:
 
 env:
   LOAD_TEST_RESOURCE: "quick-demo-alt-jaa2"
-  LOAD_TEST_RESOURCE_GROUP: "samplewebappaltjaa3eastus-rg"
-  ENDPOINT_URL: "samplewebappaltjaa3.azurewebsites.net/"
+  LOAD_TEST_RESOURCE_GROUP: "nl-rg-sample-azureloadtesting-jaa"
+  ENDPOINT_URL: "samplewebappaltjaa3.azurewebsites.net"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
