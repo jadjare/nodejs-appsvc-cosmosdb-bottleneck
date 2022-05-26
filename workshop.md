@@ -8,7 +8,6 @@ The demo application is an web app hosted in Azure App Services with a Cosmos Da
 
 Later challenges are about adapting this to one of your own application or service.
 
-
 # Challenge One - Create Load Test Resource
 
 This may be done in the Azure portal or using automation. You could also try the [Quickstart](https://docs.microsoft.com/en-us/azure/load-testing/quickstart-create-and-run-load-test)
@@ -19,10 +18,9 @@ You need to consider the location of the load testing service with respect to th
 
 So, now we have a load testing service and we have tested it out against a URL, now let's deploy an application in the next challenge.
 
-
 # Challenge Two - Create a Demo System Under Test
 
-This challenge is about having our own application to test that we can later change to meet our performance requirements. 
+This challenge is about having our own application to test that we can later change to meet our performance requirements.
 
 ## Installation
 
@@ -32,30 +30,31 @@ This challenge is about having our own application to test that we can later cha
 git clone https://github.com/jometzg/nodejs-appsvc-cosmosdb-bottleneck.git
 ```
 
-2. In your terminal window, log into Azure and set a subscription(subscription which would contain the webapp) :
+2.  In your terminal window, log into Azure and set a subscription(subscription which would contain the webapp) :
 
         az login
         az account set -s mySubscriptionName
 
-3. Clone the sample application's source repository. The sample application is a Node.js app consisting of an Azure App Service web component and a Cosmos DB database. The repo also contains a PowerShell script that deploys the sample app to your Azure subscription.
+3.  Clone the sample application's source repository. The sample application is a Node.js app consisting of an Azure App Service web component and a Cosmos DB database. The repo also contains a PowerShell script that deploys the sample app to your Azure subscription.
 
         git clone https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git
 
-4. Deploy the sample app using the PowerShell script. (Tip: macOS users can install PowerShell [here](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
+4.  Deploy the sample app using the PowerShell script. (Tip: macOS users can install PowerShell [here](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
 
         cd SampleApp
         .\deploymentscript.ps1
 
-5. You will be prompted to supply a unique application name and a location (default is `eastus`). A resource group for the resources would be created with the same name.
-6. Once deployment is complete, browse to the running sample application with your browser.
+5.  You will be prompted to supply a unique application name and a location (default is `eastus`). A resource group for the resources would be created with the same name.
+6.  Once deployment is complete, browse to the running sample application with your browser.
 
         https://<app_name>.azurewebsites.net
 
 ## Discussion
+
 Once deployed, discuss:
+
 1. the application location
 2. the application moving parts and how these may impact the performance of the application.
-
 
 # Challenge Three - Run a load test against the application
 
@@ -80,13 +79,13 @@ Once the configuration is complete. If the load test has not started, press "Run
 ![alt-text](img/azure-load-test-run.png "load test run")
 
 Look closely at the results from the run. Some discussion points:
+
 1. What is the overall request rate
 2. Is this what is needed
 3. Are there any errors? If, so any ideas why?
 4. Look at the Cosmos database metrics
 
 The next step will be to tune the application and re-test to see if we can meet the original target request rate.
-
 
 # Challenge Four - Tune the application and re-check
 
@@ -107,13 +106,14 @@ You can also compare different runs to see their differences. This is really use
 ![alt-text](img/azure-load-test-compare-multiple-runs.png "load test compare multiple runs")
 
 ## Discuss
+
 1. Did you hit the target requests per second?
 2. What needed to change to do this?
-
 
 # Challenge Five - Automate load testing in a GitHub Action
 
 You will need to think about:
+
 1. In which GitHub repository to run the action
 2. when the action will run
 3. How the action step is authenticated
@@ -147,15 +147,15 @@ jobs:
     name: Load Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout GitHub Actions 
+      - name: Checkout GitHub Actions
         uses: actions/checkout@v2
-          
+
       - name: Login to Azure
         uses: azure/login@v1
         continue-on-error: false
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
+
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:
@@ -177,6 +177,7 @@ jobs:
 ```
 
 The workflow has three steps:
+
 1. Authenticate using an Azure AD service principal. This is the "AZURE_CREDENTIALS" GitHub secret. This service principal creation is outside of this pipelien and is documented [here](https://docs.microsoft.com/en-us/azure/load-testing/tutorial-cicd-github-actions#set-up-github-access-permissions-for-azure)
 2. Run the load test using the "SampleApp.yaml" - which references the JMeter test file "SampleApp.xml"
 3. Upload the results
@@ -189,7 +190,7 @@ testName: SampleAppTestParam
 testPlan: SampleAppParam.jmx
 description: 'SampleApp Test Run'
 engineInstances: 1
-failureCriteria: 
+failureCriteria:
 - avg(response_time_ms) > 5000
 - percentage(error) > 20
 ```
@@ -202,11 +203,9 @@ So, now we have a working test that can be run interactively or as part of CI/CD
 
 If you have managed to this successfully, all that is left is to apply this to your own application.
 
-
-
 # Challenge Six - Generate a JMeter Dashboard of the results
 
-This is an optional challenge. 
+This is an optional challenge.
 
 The Azure Load Test service is currently in preview. The feature to generate JMeter dashboards has been disabled. In the meantime, if the JMeter HTML dashboard is needed, then it needs to be done directly in JMeter.
 
@@ -220,7 +219,7 @@ Firstly, you need to download the load test results file from the Azure portal. 
 
 ![alt-text](img/azure-load-test-download-results.png "Download load test results")
 
-If you want to generate the HTML report interactively, then start JMeter and choose Generate HTML Report. This requires you to add the test results CSV and a default properties file https://github.com/apache/jmeter/blob/master/bin/user.properties 
+If you want to generate the HTML report interactively, then start JMeter and choose Generate HTML Report. This requires you to add the test results CSV and a default properties file https://github.com/apache/jmeter/blob/master/bin/user.properties
 
 ![alt-text](img/azure-load-test-generate-html-report1.png "JMeter generate HTML Report")
 
@@ -238,13 +237,11 @@ The command line approach is:
 
 ![alt-text](img/azure-load-test-command-line-html-report.png "JMeter HTML Report")
 
-
-
 # Challenge Seven - Load test your own application's endpoint
 
 This is where things get more interesting - to apply all of the above to an application of your own. What you will need to do is:
+
 1. Create/amend a JMX file. You can either use the JMeter user interface or use an interactive JMX editor http://jmeter-plugins.org/editor/
 2. Run load test interactively
 3. Discuss what changes may be needed to the application or test to get better results
 4. Automate in GitHub action - setting success criteria
-
