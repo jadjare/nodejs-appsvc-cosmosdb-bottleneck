@@ -7,7 +7,8 @@ on:
   push:
     branches:
       - main
-
+  workflow_dispatch:
+    
 env:
   LOAD_TEST_RESOURCE: "quick-demo-alt-jaa2"
   LOAD_TEST_RESOURCE_GROUP: "samplewebappaltjaa3eastus-rg"
